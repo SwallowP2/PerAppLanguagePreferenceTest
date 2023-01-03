@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">اپ دو زبانه</string>
+    <string name="action_settings">تنظیمات</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">فرگمنت اول</string>
+    <string name="second_fragment_label">فرگمنت دوم</string>
+    <string name="next">بعدی</string>
+    <string name="previous">قبلی</string>
+
+    <string name="hello_first_fragment">سلام فرگمنت اول</string>
+    <string name="hello_second_fragment">سلام فرگمنت دوم. Arg: %1$s</string>
+</resources>
