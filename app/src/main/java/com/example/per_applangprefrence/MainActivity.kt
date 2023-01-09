@@ -1,8 +1,11 @@
 package com.example.per_applangprefrence
 
+import android.app.LocaleManager
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
+import android.os.LocaleList
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -11,17 +14,22 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.example.per_applangprefrence.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("en,fa")
+    val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("fa-IR")
+
+    private var localeManager: LocaleManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +45,19 @@ class MainActivity : AppCompatActivity() {
 
 
         // Call this on the main thread as it may require Activity.restart()
-        AppCompatDelegate.setApplicationLocales(appLocale)
+//        AppCompatDelegate.setApplicationLocales(appLocale)
 
         // Call this to get the selected locale and display it in your App
         val selectedLocale = AppCompatDelegate.getApplicationLocales()[1]
 
-        binding.fab.setOnClickListener { view ->
-            MaterialAlertDialogBuilder(this)
-                .setMessage("Select a lang")
-                .setNeutralButton("farsi") { dialog, which -> selectedLocale }.show()
-                .show()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            localeManager =
+                getSystemService(Context.LOCALE_SERVICE) as LocaleManager
+        }
+
+        binding.fab.setOnClickListener {
+                val localeList = LocaleListCompat.forLanguageTags("fa-IR")
+                AppCompatDelegate.setApplicationLocales(localeList)
         }
     }
 
@@ -115,8 +126,7 @@ class MainActivity : AppCompatActivity() {
             // Fetch the selected language from wherever it was stored. In this case it’s SharedPref
 
             // In this case let’s assume that it was stored in a key named SELECTED_LANGUAGE
-            getString(SELECTED_LANGUAGE)?.let {
-                it ->
+            getString(SELECTED_LANGUAGE)?.let { it ->
 
                 // Set this locale using the AndroidX library that will handle the storage itself
                 val localeList = LocaleListCompat.forLanguageTags(it)
